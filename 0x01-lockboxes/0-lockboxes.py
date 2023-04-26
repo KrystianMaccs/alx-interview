@@ -3,22 +3,18 @@
 '''
 
 def canUnlockAll(boxes):
-    """Checks if all the boxes in a list of boxes containing the keys
+    '''Checks if all the boxes in a list of boxes containing the keys
     (indices) to other boxes can be unlocked given that the first
     box is unlocked.
-    """
-    opened_boxes = set([0])
-    
-    # Initialize a list to keep track of the keys that have been obtained
-    obtained_keys = boxes[0]
-    
-    # Iterate over the obtained keys and try to open new boxes
-    while obtained_keys:
-        # Remove a key from the obtained keys list
-        key = obtained_keys.pop(0)
-        
-        if key < len(boxes) and key not in opened_boxes:
-            opened_boxes.add(key)
-            
-            obtained_keys.extend(boxes[key])
-        return len(opened_boxes) == len(boxes)
+    '''
+    n = len(boxes)
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        boxIdx = unseen_boxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
+            seen_boxes.add(boxIdx)
+    return n == len(seen_boxes)
